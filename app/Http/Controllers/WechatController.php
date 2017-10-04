@@ -120,7 +120,7 @@ class WechatController extends Controller
                     'thumb_media_id' => '04c3f38da9773912145e5d4afb198618377ae2e7.jpg',
                     'digest' => '图文消息的摘要，仅有单图文消息才有摘要，多图文此处为空',
                     'source_url' => 'www.dengkangfa.com',
-                    'show_cover' => 1
+                    'show_cover' => 0
                 ]);
                 return $article;
                 break;
