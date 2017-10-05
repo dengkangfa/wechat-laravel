@@ -43,7 +43,7 @@ class WechatController extends Controller
                 case 'video':
                         $video = new Video();
                         $video->media_id = $message->MediaId;
-                        $video->ThumbMediaId = $message->ThumbMediaId;
+                        $video->thumb_media_id  = $message->ThumbMediaId;
                         $video->title = '测试数据标题';
                         $video->description = '测试数据描述';
                         return $video;
@@ -104,13 +104,25 @@ class WechatController extends Controller
         $createTime = $message->CreateTime;
         switch ($text) {
             case 'tw':
-                $news = new News([
-                    'title' => '测试数据',
+                $new1 = new News([
+                    'title' => '测试数据1',
                     'description' => '测试数据描述',
                     'url' => 'www.baidu.com',
                     'image' => 'https://i.pximg.net/c/600x600/img-master/img/2017/09/23/21/31/40/65101437_p0_master1200.jpg'
                 ]);
-                return $news;
+                $new2 = new News([
+                    'title' => '测试数据2',
+                    'description' => '测试数据描述',
+                    'url' => 'www.baidu.com',
+                    'image' => 'https://i.pximg.net/c/600x600/img-master/img/2017/09/23/21/31/40/65101437_p0_master1200.jpg'
+                ]);
+                $new3 = new News([
+                    'title' => '测试数据3',
+                    'description' => '测试数据描述',
+                    'url' => 'www.baidu.com',
+                    'image' => 'https://i.pximg.net/c/600x600/img-master/img/2017/09/23/21/31/40/65101437_p0_master1200.jpg'
+                ]);
+                return [$new1, $new2, $new3];
                 break;
             case 'wz':
                 $article = new Article([
@@ -128,6 +140,9 @@ class WechatController extends Controller
                 $material = new Material('image', '04c3f38da9773912145e5d4afb198618377ae2e7.jpg');
                 return $material;
                 break;
+            case '群发':
+                return $this->massMessage($message);
+                break;
             default:
                 $text = new Text();
                 $text->content = '收到文字消息：收到'.$fromUserName.' 发送给 '.$toUserName.'的文字消息 <'.date('Y-m-d H:i:s', $createTime).'>'
@@ -135,5 +150,13 @@ class WechatController extends Controller
                 return $text;
                 break;
         }
+    }
+
+    public function massMessage($message) {
+        $wechat = app('wechat');
+
+        $broadcast = $wechat->broadcast;
+        $broadcast->previewText("你好啊！", $message->FromUserName);
+        return $broadcast;
     }
 }
