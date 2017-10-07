@@ -156,7 +156,7 @@ class WechatController extends Controller
         $wechat = app('wechat');
 
         $broadcast = $wechat->broadcast;
-        $result = $broadcast->previewText("你好啊！", $message->FromUserName);
+        $result = $broadcast->sendText("你好啊！");
         $broadcast->delete($result->msg_id);
         $msg_status = $broadcast->status($result->msg_id)->msg_status;
         return '群发状态：' . $msg_status;
